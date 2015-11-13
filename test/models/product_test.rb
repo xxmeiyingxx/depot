@@ -73,4 +73,33 @@ class ProductTest < ActiveSupport::TestCase
   #   assert_equal I18n.translate('errors.message.taken'), product.errors[:title].join(';')
   # end
 
+  test "title of more than 10 characters or length" do
+    product = products(:ruby)
+
+    product.title = "123456789"
+    assert product.invalid?
+
+    product.title = "1234567890"
+    assert product.valid?
+
+    product.title = "あいうえおかきくけ"
+    assert product.invalid?
+
+    product.title = "あいうえおかきくけこ"
+    assert product.valid?
+
+    # 全てが半角スペースの時は「空っぽ扱い」らしいよ！
+    product.title = "          "
+    assert product.invalid?, "#{product.title.size} characters"
+    assert product.errors[:title].join(";").include?("can't be blank")
+
+    # 全てが全角スペースの時も「空っぽ扱い」らしいよ！
+    product.title = "　　　　　　　　　　"
+    assert product.invalid?, "#{product.title.size} characters"
+
+    # 1文字でもスペース以外が含まれていたらvalidらしいよ！
+    product.title = "1         "
+    assert product.valid?, "#{product.title.size} characters"
+  end
+
 end
