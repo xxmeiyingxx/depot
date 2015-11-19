@@ -24,6 +24,9 @@
           <%= @time_d %><br>
           <%= @time_r %>
         </p>
+        <% if @cart %>
+          <p><%= link_to('現在のカートを確認する', cart_path(@cart)) %></p>
+        <% end %>
       </div>
       <div id="main">
         <%= yield %>

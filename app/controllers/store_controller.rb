@@ -11,6 +11,6 @@ class StoreController < ApplicationController
     end
 
     @counter = session[:counter]
-
+    @cart = current_cart
   end
 end
